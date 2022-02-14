@@ -1,23 +1,46 @@
 version: '3.8'
 
 services:
-  short-url-app:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ./short-url-app
+    container_name: app
+#    volumes:
+#      - ./app:/app
+    command: ["go", "run", "main.go"]
     ports:
       - 8080:8080
     depends_on:
       - db
     env_file: .env
+    environment:
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - app-network
 
   db:
+    build:
+      context: .
+      dockerfile: ./database/Dockerfile
     restart: always
     image: postgres:latest
-#    volumes:
-#      - ./.database/postgres/data:/var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
     env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres:
 

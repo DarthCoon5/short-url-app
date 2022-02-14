@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"short-url-app/pkg/service"
@@ -19,11 +20,20 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/")
 	{
-		api.POST("*longUrl", h.saveLongUrl)
-		api.GET("*shortUrl", h.getLongUrl)
+		api.POST("*longUrl", h.h1)
+		api.GET("*shortUrl", h.h2)
 	}
 
 	return router
+}
+
+func (h *Handler) h1(c *gin.Context) {
+	fmt.Println("print OK POST")
+	c.JSON(200, "OK POST")
+}
+func (h *Handler) h2(c *gin.Context) {
+	fmt.Println("print OK GET")
+	c.JSON(200, "OK GET")
 }
 
 func (h *Handler) saveLongUrl(c *gin.Context) {

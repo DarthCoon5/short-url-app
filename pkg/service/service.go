@@ -10,8 +10,12 @@ type Service struct {
 	host string
 }
 
-func NewService(repo *repository.Repository, host string) *Service {
+/*func NewService(repo *repository.Repository, host string) *Service {
 	return &Service{repo: repo, host: host}
+}*/
+
+func NewService() *Service {
+	return &Service{}
 }
 
 func (s *Service) SaveLongUrl(longUrl string) (string, error) {
